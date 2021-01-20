@@ -1,8 +1,9 @@
-from django.http import HttpResponse
-from django.template import loader
+from django.http import JsonResponse
 from chatbot.utils.googlesearcher import scraper
 from chatbot.utils.chatter import chatbot_response
 import re
+from django.views.decorators.csrf import csrf_exempt
+
 
 
 replacables = [
@@ -27,12 +28,13 @@ replacables = [
 
 
 # Create your views here.
+@csrf_exempt
 def index(request):
-    template = loader.get_template('chatbot/index.html')
     response = ''
     if request.method == 'POST':
-        _input = request.POST.get('inputer')
+        _input = request.POST.get('input_cb1')
         _input = str(_input)
+        print('input:', _input)
 
         res, ints = chatbot_response(_input)
 
@@ -56,9 +58,6 @@ def index(request):
 
             response = scraper.searchQuery(input_)
 
-    context = { 'key': response }
-    print(response)
 
-    # return HttpResponse(template.render(context, request))
-    return HttpResponse(response)
+    return JsonResponse({ 'output_cb1': response })
 
