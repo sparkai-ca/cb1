@@ -38,10 +38,9 @@ def index(request):
 
         res, ints = chatbot_response(_input)
 
-        print(res, ints)
-
         if len(ints)==1 and float(ints[0]['probability'])>0.8:
             response = res
+            print('output:', response)
         else:
             _input = _input.lower()
             _input = ''.join(re.findall('[a-zA-Z\n0-9 ]', _input))
@@ -53,11 +52,9 @@ def index(request):
                 else:
                     input_ = input_ + ' ' + i
             input_ = input_.replace('  ', ' ').strip()
-
             print('input: ', input_)
-
             response = scraper.searchQuery(input_)
-
+            print('output:', response)
 
     return JsonResponse({ 'output_cb1': response })
 
